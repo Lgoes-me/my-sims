@@ -12,6 +12,10 @@ namespace Data
     {
         [field: SerializeField] private List<MotiveData> MotivesData { get; set; }
         [field: SerializeField] private AdvertisementData PassiveAdvertisement { get; set; }
+        
+        [field: SerializeField] private int Indecisao { get; set; }
+        [field: SerializeField] private float Desespero { get; set; }
+        [field: SerializeField] private float Velocidade { get; set; }
 
         public Character ToDomain(
             string name,

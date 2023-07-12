@@ -18,11 +18,13 @@ namespace Domain
             CurrentDuration = duration;
             IsInteracting = true;
 
+            Advertisement.Broadcaster?.OnInteractionStart();
+            
             Callback = () =>
             {
                 IsInteracting = false;
                 Callback = null;
-                Advertisement.Broadcaster.OnInteractionFinish();
+                Advertisement.Broadcaster?.OnInteractionFinish();
                 
                 callback();
             };

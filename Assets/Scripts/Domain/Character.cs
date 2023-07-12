@@ -75,9 +75,7 @@ namespace Domain
                     motive.InitResolution(resolution);
                 }
             }
-            
-            advertisement.Broadcaster.OnInteractionStart(this);
-            
+
             CurrentInteraction = advertisement.StartInteraction(() =>
             {
                 FinishInteraction();
@@ -95,11 +93,12 @@ namespace Domain
             CurrentInteraction = null;
         }
 
-        public override void OnInteractionStart(Character character)
+        public override void OnInteractionStart()
         {
-            base.OnInteractionStart(character);
+            base.OnInteractionStart();
             Pause();
-            MoveToNextInteraction(character.PassiveAdvertisement);
+            
+            MoveToNextInteraction(PassiveAdvertisement);
         }
         
         private void Pause()

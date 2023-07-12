@@ -16,7 +16,7 @@ namespace Domain
             }
         }
         
-        public virtual void OnInteractionStart(Character character)
+        public virtual void OnInteractionStart()
         {
             
         }

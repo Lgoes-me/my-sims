@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain;
 using Extensions;
 using TMPro;
@@ -11,14 +12,11 @@ public class CharacterMenuController : MonoBehaviour
     [field: SerializeField] private Transform BarViewContent { get; set; }
     [field: SerializeField] private BarController BarControllerPrefab { get; set; }
 
-    private Character CurrentCharacter { get; set; }
-    
+    private Coroutine UpdateCoroutine { get; set; }
+
     public void Show(Character character)
     {
-        CurrentCharacter = character;
         NameText.SetText(character.Name);
-        
-        CurrentAction.SetText(character.CurrentAdvertisement?.Name ?? " ");
 
         BarViewContent.Clear();
 
@@ -26,10 +24,21 @@ public class CharacterMenuController : MonoBehaviour
         {
             Instantiate(BarControllerPrefab, BarViewContent).Init(motive);
         }
+
+        if (UpdateCoroutine != null)
+            StopCoroutine(UpdateCoroutine);
+
+        UpdateCoroutine = StartCoroutine(UpdateCurrentAction(character));
     }
 
-    private void UpdateCurrentAction()
+    private IEnumerator UpdateCurrentAction(Character character)
     {
-        CurrentAction.SetText(CurrentCharacter.CurrentAdvertisement?.Name ?? " ");
+        while (gameObject.activeInHierarchy)
+        {
+            CurrentAction.SetText(character.CurrentInteraction?.Advertisement.Name ?? string.Empty);
+
+            yield return new WaitUntil(() =>
+                CurrentAction.text != (character.CurrentInteraction?.Advertisement.Name ?? string.Empty));
+        }
     }
 }

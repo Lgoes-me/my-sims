@@ -5,13 +5,15 @@ namespace Domain
 {
     public class Interaction
     {
+        public Advertisement Advertisement { get; }
         private int MaxDuration { get; set; }
         private int CurrentDuration { get; set; }
         private bool IsInteracting { get; set; }
         private Action Callback { get; set; }
 
-        public Interaction(int duration, Action callback)
+        public Interaction(Advertisement advertisement, int duration, Action callback)
         {
+            Advertisement = advertisement;
             MaxDuration = duration;
             CurrentDuration = duration;
             IsInteracting = true;

@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Broadcaster
     {
-        public List<Advertisement> Advertisements { get; private set; }
+        public List<Advertisement> Advertisements { get; }
 
         public Broadcaster(List<Advertisement> advertisements)
         {

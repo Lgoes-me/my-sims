@@ -12,10 +12,7 @@ namespace Domain
         public Broadcaster Broadcaster { get; }
         private BroadcasterManager BroadcasterManager { get; }
         public IMovableTransform Transform { get; }
-
-        public Advertisement CurrentAdvertisement { get; private set; }
-        private Interaction CurrentInteraction { get; set; }
-        
+        public Interaction CurrentInteraction { get; private set; }
         private bool IsPaused { get; set; }
 
         public Character(
@@ -51,7 +48,7 @@ namespace Domain
         {
             var advertisement = BroadcasterManager.FindAdvertisement(this);
 
-            if (advertisement == CurrentAdvertisement)
+            if (advertisement == CurrentInteraction?.Advertisement)
                 return;
 
             MoveToNextInteraction(advertisement);
@@ -59,7 +56,7 @@ namespace Domain
 
         private void MoveToNextInteraction(Advertisement advertisement)
         {
-            if (CurrentAdvertisement != null)
+            if (CurrentInteraction != null)
                 CurrentInteraction.ForceFinish();
 
             var movementData = new Movement(advertisement.Transform, () => StartInteraction(advertisement));
@@ -77,21 +74,16 @@ namespace Domain
                 }
             }
 
-            CurrentAdvertisement = advertisement;
-            CurrentInteraction = CurrentAdvertisement.ToInteraction(FinishInteraction);
+            CurrentInteraction = advertisement.StartInteraction(FinishInteraction);
         }
 
         private void FinishInteraction()
         {
-            foreach (var resolution in CurrentAdvertisement.Resolutions)
+            foreach (var (_, motive) in Motives)
             {
-                if (Motives.TryGetValue(resolution.Need, out var motive))
-                {
-                    motive.FinishResolution();
-                }
+                motive.FinishResolution();
             }
 
-            CurrentAdvertisement = null;
             CurrentInteraction = null;
 
             if (!IsPaused)

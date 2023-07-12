@@ -9,7 +9,6 @@ namespace Domain
         public string Name { get; }
         public List<Resolution> Resolutions { get; }
         public ITransform Transform { get; }
-
         private int Duration { get; }
 
         public Advertisement(
@@ -24,9 +23,9 @@ namespace Domain
             Duration = duration;
         }
 
-        public Interaction ToInteraction(Action callback)
+        public Interaction StartInteraction(Action callback)
         {
-            return new Interaction(Duration, callback);
+            return new Interaction(this, Duration, callback);
         }
     }
 }

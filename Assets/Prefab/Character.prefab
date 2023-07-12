@@ -58,6 +58,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: e285d7a528d4f9e4f8ac8497c446edfd, type: 2}
     - {fileID: 11400000, guid: e691fdfce00c7d44fa20a7e2d1daeeb7, type: 2}
     - {fileID: 11400000, guid: 8e0579871eab03f46a6fbc30e26ceb4a, type: 2}
+    <PassiveAdvertisement>k__BackingField: {fileID: 11400000, guid: 7176314188ceb094b9457cd454a6f22e, type: 2}
 --- !u!135 &2153209596732692302
 SphereCollider:
   m_ObjectHideFlags: 0

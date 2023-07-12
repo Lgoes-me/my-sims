@@ -17,19 +17,20 @@ namespace Domain
             MaxDuration = duration;
             CurrentDuration = duration;
             IsInteracting = true;
-            
+
             Callback = () =>
             {
                 IsInteracting = false;
                 Callback = null;
-
+                Advertisement.Broadcaster.OnInteractionFinish();
+                
                 callback();
             };
         }
 
         public void OnTick()
         {
-            if(!IsInteracting)
+            if(CurrentDuration == -1 || !IsInteracting)
                 return;
 
             CurrentDuration = Mathf.Clamp(CurrentDuration - 1, 0, MaxDuration);

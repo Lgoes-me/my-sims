@@ -42,7 +42,7 @@ namespace Manager
                     return value;
                     
                 })
-                .Except(character.Broadcaster.Advertisements)
+                .Except(character.Advertisements)
                 .ToList();
 
             var upperLimit = Mathf.Min(advertisements.Count, 4);

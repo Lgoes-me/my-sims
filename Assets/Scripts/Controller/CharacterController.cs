@@ -7,14 +7,14 @@ using UnityEngine.AI;
 
 namespace Controller
 {
-    public class CharacterController : BroadcasterController, IMovableTransform, IInteractable
+    public class CharacterController : BroadcasterController, IMovableTransform
     {
         [field: SerializeField] private CharacterData CharacterData { get; set; }
         
         private Character Character { get; set; }
         private NavMeshAgent NavMeshAgent { get; set; }
         private CharacterMenuController CharacterMenuController { get; set; }
-        private Movement Movement { get; set; }
+        public Movement Movement { get; private set; }
 
         private void Awake()
         {
@@ -46,13 +46,17 @@ namespace Controller
             if (Movement == null) return;
             
             NavMeshAgent.SetDestination(Movement.Destination.Position);
-                
-            if (Movement.CheckForDestinationReached(NavMeshAgent)) 
+
+            if (Movement.CheckForDestinationReached(NavMeshAgent))
+            {
+                NavMeshAgent.isStopped = true;
                 Movement = null;
+            }
         }
         
         public void MoveTo(Movement movement)
         {
+            NavMeshAgent.isStopped = false;
             Movement = movement;
         }
 
@@ -60,18 +64,6 @@ namespace Controller
         private void OnMouseUp()
         {
             CharacterMenuController.Show(Character);
-        }
-
-        public void OnInteractionStart(Character character)
-        {
-            NavMeshAgent.isStopped = true;
-            Character.Pause();
-        }
-
-        public void OnInteractionFinish()
-        {
-            NavMeshAgent.isStopped = false;
-            Character.Resume();
         }
     }
 }

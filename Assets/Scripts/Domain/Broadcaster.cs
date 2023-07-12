@@ -9,6 +9,21 @@ namespace Domain
         public Broadcaster(List<Advertisement> advertisements)
         {
             Advertisements = advertisements;
+
+            foreach (var advertisement in Advertisements)
+            {
+                advertisement.RegisterBroadcaster(this);
+            }
+        }
+        
+        public virtual void OnInteractionStart(Character character)
+        {
+            
+        }
+        
+        public virtual void OnInteractionFinish()
+        {
+            
         }
     }
 }

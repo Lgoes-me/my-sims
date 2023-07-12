@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Data
 {
-    [CreateAssetMenu(fileName = "InteractionData", menuName = "ScriptableObjects/InteractionData")]
+    [CreateAssetMenu(fileName = "AdvertisementData", menuName = "ScriptableObjects/AdvertisementData")]
     public class AdvertisementData : ScriptableObject
     {
         [field: SerializeField] private List<ResolutionData> ResolutionDatas { get; set; }

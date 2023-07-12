@@ -10,6 +10,8 @@ namespace Domain
         public List<Resolution> Resolutions { get; }
         public ITransform Transform { get; }
         private int Duration { get; }
+        
+        public Broadcaster Broadcaster { get; private set; }
 
         public Advertisement(
             string name,
@@ -26,6 +28,11 @@ namespace Domain
         public Interaction StartInteraction(Action callback)
         {
             return new Interaction(this, Duration, callback);
+        }
+
+        public void RegisterBroadcaster(Broadcaster broadcaster)
+        {
+            Broadcaster = broadcaster;
         }
     }
 }

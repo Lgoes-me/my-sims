@@ -11,6 +11,8 @@ namespace Domain
 
         private float StartTime { get; }
         private Action OnDestinationReached { get; }
+        
+        private bool IsStopped { get; set; }
 
         public Movement(ITransform destination, Action onDestinationReached)
         {
@@ -21,6 +23,9 @@ namespace Domain
 
         public bool CheckForDestinationReached(NavMeshAgent navMeshAgent)
         {
+            if (IsStopped)
+                return true;
+            
             var hasReachedDestination =
                 Time.time - StartTime > 1f &&
                 navMeshAgent.pathStatus == NavMeshPathStatus.PathComplete &&
@@ -31,6 +36,11 @@ namespace Domain
 
             OnDestinationReached();
             return true;
+        }
+
+        public void Stop()
+        {
+            IsStopped = true;
         }
     }
 }

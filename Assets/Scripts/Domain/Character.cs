@@ -5,28 +5,30 @@ using Manager;
 
 namespace Domain
 {
-    public class Character : ITimeManagerListener
+    public class Character : Broadcaster, ITimeManagerListener
     {
         public string Name { get; }
         public Dictionary<string, Motive> Motives { get; }
-        public Broadcaster Broadcaster { get; }
         private BroadcasterManager BroadcasterManager { get; }
         public IMovableTransform Transform { get; }
+        private Advertisement PassiveAdvertisement { get; }
         public Interaction CurrentInteraction { get; private set; }
-        private bool IsPaused { get; set; }
 
         public Character(
             string name,
             List<Motive> motives,
-            Broadcaster broadcaster,
+            List<Advertisement> advertisements,
+            Advertisement passiveAdvertisement,
             BroadcasterManager broadcasterManager,
-            IMovableTransform transform)
+            IMovableTransform transform) : base(advertisements)
         {
             Name = name;
             Motives = motives.ToDictionary(m => m.Need, m => m);
-            Broadcaster = broadcaster;
             BroadcasterManager = broadcasterManager;
             Transform = transform;
+            
+            PassiveAdvertisement = passiveAdvertisement;
+            PassiveAdvertisement.RegisterBroadcaster(this);
         }
 
         public void Init()
@@ -73,8 +75,14 @@ namespace Domain
                     motive.InitResolution(resolution);
                 }
             }
-
-            CurrentInteraction = advertisement.StartInteraction(FinishInteraction);
+            
+            advertisement.Broadcaster.OnInteractionStart(this);
+            
+            CurrentInteraction = advertisement.StartInteraction(() =>
+            {
+                FinishInteraction();
+                SearchNextBroadcaster();
+            });
         }
 
         private void FinishInteraction()
@@ -83,22 +91,31 @@ namespace Domain
             {
                 motive.FinishResolution();
             }
-
+            
             CurrentInteraction = null;
-
-            if (!IsPaused)
-                SearchNextBroadcaster();
         }
 
-        public void Pause()
+        public override void OnInteractionStart(Character character)
         {
-            IsPaused = true;
+            base.OnInteractionStart(character);
+            Pause();
+            MoveToNextInteraction(character.PassiveAdvertisement);
+        }
+        
+        private void Pause()
+        {
+            Transform.Movement?.Stop();
             CurrentInteraction?.ForceFinish();
         }
-
-        public void Resume()
+        
+        public override void OnInteractionFinish()
         {
-            IsPaused = false;
+            base.OnInteractionFinish();
+            Resume();
+        }
+        
+        private void Resume()
+        {
             SearchNextBroadcaster();
         }
     }

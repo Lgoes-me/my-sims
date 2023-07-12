@@ -22,10 +22,10 @@ namespace Manager
             Broadcasters.Add(broadcaster);
         }
 
-        public Interaction FindInteraction(Character character)
+        public Advertisement FindAdvertisement(Character character)
         {
-            var interactions = Broadcasters
-                .SelectMany(b => b.Interactions)
+            var advertisements = Broadcasters
+                .SelectMany(b => b.Advertisements)
                 .OrderBy(i =>
                 {
                     var value = 0.0f;
@@ -41,9 +41,13 @@ namespace Manager
                     
                     return value;
                     
-                }).Except(character.Broadcaster.Interactions).ToList();
+                })
+                .Except(character.Broadcaster.Advertisements)
+                .ToList();
 
-            return interactions[0];
+            var upperLimit = Mathf.Min(advertisements.Count, 4);
+            
+            return advertisements[Random.Range(0, upperLimit)];
         }
     }
 }

@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace View
+namespace Controller
 {
-    public class BarView : MonoBehaviour
+    public class BarController : MonoBehaviour
     {
         [field:SerializeField] private TextMeshProUGUI Name { get; set; }
         [field:SerializeField] private Image Image { get; set; }

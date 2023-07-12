@@ -1,7 +1,9 @@
-﻿using Manager;
+﻿using Controller;
+using Manager;
 using UnityEngine;
+using CharacterController = Controller.CharacterController;
 
-namespace Controller
+namespace Scenes
 {
     public class GameplayScene : MonoBehaviour
     {
@@ -15,7 +17,7 @@ namespace Controller
             
             foreach (var broadcaster in Broadcasters)
             {
-                broadcaster.Init(gameManager.BroadcasterManager, gameManager.TimeManager);
+                broadcaster.Init(gameManager.BroadcasterManager);
             }
             
             foreach (var character in Characters)

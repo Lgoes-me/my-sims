@@ -10,13 +10,13 @@ namespace Data
         private NeedData Need { get; set; }
     
         [field: SerializeField]
-        private float Gain { get; set; }
+        private float Rate { get; set; }
     
         public Resolution ToDomain()
         {
             return new Resolution(
                 Need.ToDomain(),
-                Gain);
+                Rate);
         }
     }
 }

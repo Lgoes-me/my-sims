@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ResolutionDatas>k__BackingField:
   - <Need>k__BackingField: {fileID: 11400000, guid: 38e867f18ed6d6c4e9b95e2bc1f047cd, type: 2}
-    <Gain>k__BackingField: -20
+    <Rate>k__BackingField: -5
   <Duration>k__BackingField: 3

@@ -2,6 +2,6 @@
 {
     public interface IMovableTransform : ITransform
     {
-        void MoveTo(MovementData movementData);
+        void MoveTo(Movement movement);
     }
 }

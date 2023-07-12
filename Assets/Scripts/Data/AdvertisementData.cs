@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Domain;
 using Domain.Interface;
@@ -8,25 +7,18 @@ using UnityEngine;
 namespace Data
 {
     [CreateAssetMenu(fileName = "InteractionData", menuName = "ScriptableObjects/InteractionData")]
-    public class InteractionData : ScriptableObject
+    public class AdvertisementData : ScriptableObject
     {
         [field: SerializeField] private List<ResolutionData> ResolutionDatas { get; set; }
         [field: SerializeField] private int Duration { get; set; }
 
-        public Interaction ToDomain(
-            string broadcasterName,
-            ITransform transform, 
-            Action<Character> onInteractionStart, 
-            Action onInteractionFinish)
+        public Advertisement ToDomain(ITransform transform)
         {
-            return new Interaction(
+            return new Advertisement(
                 name,
-                broadcasterName,
                 ResolutionDatas.Select(i => i.ToDomain()).ToList(),
-                Duration,
                 transform,
-                onInteractionStart,
-                onInteractionFinish);
+                Duration);
         }
     }
 }

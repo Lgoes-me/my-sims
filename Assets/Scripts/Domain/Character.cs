@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Domain.Interface;
 using Manager;
@@ -12,17 +11,18 @@ namespace Domain
         public Dictionary<string, Motive> Motives { get; }
         public Broadcaster Broadcaster { get; }
         private BroadcasterManager BroadcasterManager { get; }
-        public IMovableTransform Transform { get; private set; }
-        public Interaction CurrentInteraction { get; private set; }
-        public Action OnCurrentInteractionChanged { get; set; }
+        public IMovableTransform Transform { get; }
 
-        private bool IsPaused { get; set; }
+        public Advertisement CurrentAdvertisement { get; private set; }
+        private Interaction CurrentInteraction { get; set; }
         
+        private bool IsPaused { get; set; }
+
         public Character(
             string name,
-            List<Motive> motives, 
+            List<Motive> motives,
             Broadcaster broadcaster,
-            BroadcasterManager broadcasterManager, 
+            BroadcasterManager broadcasterManager,
             IMovableTransform transform)
         {
             Name = name;
@@ -43,63 +43,65 @@ namespace Domain
             {
                 motive.OnTick();
             }
+
+            CurrentInteraction?.OnTick();
         }
 
         private void SearchNextBroadcaster()
         {
-            var nextInteraction = BroadcasterManager.FindInteraction(this);
-            
-            if(nextInteraction == CurrentInteraction)
+            var advertisement = BroadcasterManager.FindAdvertisement(this);
+
+            if (advertisement == CurrentAdvertisement)
                 return;
-            
-            nextInteraction.Interact(this);
+
+            MoveToNextInteraction(advertisement);
         }
 
-        public void StartAction(Interaction interaction, Action callback)
+        private void MoveToNextInteraction(Advertisement advertisement)
         {
-            if (CurrentInteraction != null)
-                CurrentInteraction.ForceFinish(this);
+            if (CurrentAdvertisement != null)
+                CurrentInteraction.ForceFinish();
 
-            var movementData = new MovementData(interaction.Transform, () =>
-            {
-                foreach (var resolution in interaction.Resolutions)
-                {
-                    if (Motives.TryGetValue(resolution.Need, out var motive))
-                    {
-                        motive.InitResolve(resolution);
-                    }
-                }
+            var movementData = new Movement(advertisement.Transform, () => StartInteraction(advertisement));
 
-                CurrentInteraction = interaction;
-                OnCurrentInteractionChanged?.Invoke();
-
-                callback();
-            });
-            
             Transform.MoveTo(movementData);
         }
 
-        public void FinishAction(Interaction interaction)
+        private void StartInteraction(Advertisement advertisement)
         {
-            foreach (var resolution in interaction.Resolutions)
+            foreach (var resolution in advertisement.Resolutions)
             {
                 if (Motives.TryGetValue(resolution.Need, out var motive))
                 {
-                    motive.FinishResolve(resolution);
+                    motive.InitResolution(resolution);
                 }
             }
 
+            CurrentAdvertisement = advertisement;
+            CurrentInteraction = CurrentAdvertisement.ToInteraction(FinishInteraction);
+        }
+
+        private void FinishInteraction()
+        {
+            foreach (var resolution in CurrentAdvertisement.Resolutions)
+            {
+                if (Motives.TryGetValue(resolution.Need, out var motive))
+                {
+                    motive.FinishResolution();
+                }
+            }
+
+            CurrentAdvertisement = null;
             CurrentInteraction = null;
-            OnCurrentInteractionChanged?.Invoke();
-            
-            if(!IsPaused)
+
+            if (!IsPaused)
                 SearchNextBroadcaster();
         }
 
         public void Pause()
         {
             IsPaused = true;
-            CurrentInteraction?.ForceFinish(this);
+            CurrentInteraction?.ForceFinish();
         }
 
         public void Resume()

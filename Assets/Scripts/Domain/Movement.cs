@@ -5,14 +5,14 @@ using UnityEngine.AI;
 
 namespace Domain
 {
-    public class MovementData
+    public class Movement
     {
         public ITransform Destination { get; }
 
         private float StartTime { get; }
         private Action OnDestinationReached { get; }
 
-        public MovementData(ITransform destination, Action onDestinationReached)
+        public Movement(ITransform destination, Action onDestinationReached)
         {
             StartTime = Time.time;
             Destination = destination;

@@ -1,73 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Domain.Interface;
 using UnityEngine;
 
 namespace Domain
 {
     public class Interaction
     {
-        public string Name { get; }
-        public string BroadcasterName { get; }
-        public List<Resolution> Resolutions { get; }
-        private int MaxDuration { get; }
-        public ITransform Transform { get; }
-        private Action<Character> OnInteractionStart { get; }
-        private Action OnInteractionFinish { get; }
+        private int MaxDuration { get; set; }
+        private int CurrentDuration { get; set; }
+        private bool IsInteracting { get; set; }
+        private Action Callback { get; set; }
 
-        private Dictionary<Character, InteractionAction> InteractionActions { get; set; }
-
-        public Interaction(
-            string name, 
-            string broadcasterName, 
-            List<Resolution> resolutions, 
-            int maxDuration, 
-            ITransform transform,
-            Action<Character> onInteractionStart,
-            Action onInteractionFinish)
+        public Interaction(int duration, Action callback)
         {
-            Name = name;
-            BroadcasterName = broadcasterName;
-            Resolutions = resolutions;
-            MaxDuration = maxDuration;
-            Transform = transform;
-            OnInteractionStart = onInteractionStart;
-            OnInteractionFinish = onInteractionFinish;
+            MaxDuration = duration;
+            CurrentDuration = duration;
+            IsInteracting = true;
+            
+            Callback = () =>
+            {
+                IsInteracting = false;
+                Callback = null;
 
-            InteractionActions = new Dictionary<Character, InteractionAction>();
+                callback();
+            };
         }
 
         public void OnTick()
         {
-            for (int i = InteractionActions.Count - 1; i >= 0; i--)
-            {
-                InteractionActions.ElementAt(i).Value.OnTick();
-            }
+            if(!IsInteracting)
+                return;
+
+            CurrentDuration = Mathf.Clamp(CurrentDuration - 1, 0, MaxDuration);
+
+            if(CurrentDuration != 0)
+                return;
+
+            Callback?.Invoke();
         }
 
-        public void Interact(Character character)
-        {
-            character.StartAction(this, () =>
-            {
-                var interactionAction = new InteractionAction(MaxDuration);
-
-                interactionAction.SetCallback(() =>
-                {
-                    InteractionActions.Remove(character);
-                    character.FinishAction(this);
-                    OnInteractionFinish();
-                });
-
-                InteractionActions.Add(character, interactionAction);
-                Debug.Log($"{character.Name} using {BroadcasterName} to {Name}");
-                OnInteractionStart(character);
-            });
-        }
-
-        public void ForceFinish(Character character)
-        {
-            InteractionActions[character].ForceFinish();
+        public void ForceFinish()
+        {            
+            CurrentDuration = 0;
+            Callback?.Invoke();
         }
     }
 }

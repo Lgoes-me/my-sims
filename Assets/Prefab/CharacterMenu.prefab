@@ -25,7 +25,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3507956818940009425}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -79,6 +79,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a694579d6227b4e830a46fd5bc8075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <NameText>k__BackingField: {fileID: 3507956819195307972}
+  <CurrentAction>k__BackingField: {fileID: 3507956820270957674}
+  <BarViewContent>k__BackingField: {fileID: 3507956819244182918}
+  <BarControllerPrefab>k__BackingField: {fileID: 6531890004418680756, guid: 6398a021a24e1084ab368c3af8141097, type: 3}
 --- !u!1 &3507956819195307834
 GameObject:
   m_ObjectHideFlags: 0

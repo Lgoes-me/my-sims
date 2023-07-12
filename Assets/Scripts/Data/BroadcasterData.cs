@@ -10,20 +10,11 @@ namespace Data
     [Serializable]
     public class BroadcasterData
     {
-        [field: SerializeField] private List<InteractionData> InteractionsData { get; set; }
+        [field: SerializeField] protected List<AdvertisementData> InteractionsData { get; set; }
 
-        public Broadcaster ToDomain(
-            string name,
-            ITransform transform,
-            Action<Character> onInteractionStart,
-            Action onInteractionFinish)
+        public Broadcaster ToDomain(ITransform transform)
         {
-            return new Broadcaster(
-                InteractionsData.Select(i => i.ToDomain(
-                    name,
-                    transform,
-                    onInteractionStart,
-                    onInteractionFinish)).ToList());
+            return new Broadcaster(InteractionsData.Select(i => i.ToDomain(transform)).ToList());
         }
     }
 }

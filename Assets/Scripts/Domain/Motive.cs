@@ -36,12 +36,12 @@ namespace Domain
             Urgency = Curve.Evaluate(Mathf.InverseLerp(0, 100, CurrentValue));
         }
 
-        public void InitResolve(Resolution resolution)
+        public void InitResolution(Resolution resolution)
         {
             Rate = resolution.Rate;
         }
 
-        public void FinishResolve(Resolution resolution)
+        public void FinishResolution()
         {
             Rate = DefaultRate;
         }

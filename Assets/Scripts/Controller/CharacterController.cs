@@ -7,14 +7,14 @@ using UnityEngine.AI;
 
 namespace Controller
 {
-    public class CharacterController : BroadcasterController, IMovableTransform
+    public class CharacterController : BroadcasterController, IMovableTransform, IInteractable
     {
         [field: SerializeField] private CharacterData CharacterData { get; set; }
         
         private Character Character { get; set; }
         private NavMeshAgent NavMeshAgent { get; set; }
         private CharacterMenuController CharacterMenuController { get; set; }
-        private MovementData MovementData { get; set; }
+        private Movement Movement { get; set; }
 
         private void Awake()
         {
@@ -26,7 +26,7 @@ namespace Controller
             TimeManager timeManager,
             CharacterMenuController characterMenuController)
         {
-            base.Init(broadcasterManager, timeManager);
+            base.Init(broadcasterManager);
             
             Character = CharacterData.ToDomain(
                 gameObject.name, 
@@ -37,22 +37,23 @@ namespace Controller
             timeManager.Subscribe(Character);
 
             Character.Init();
+            
             CharacterMenuController = characterMenuController;
         }
 
         private void Update()
         {
-            if (MovementData == null) return;
+            if (Movement == null) return;
             
-            NavMeshAgent.SetDestination(MovementData.Destination.Position);
+            NavMeshAgent.SetDestination(Movement.Destination.Position);
                 
-            if (MovementData.CheckForDestinationReached(NavMeshAgent)) 
-                MovementData = null;
+            if (Movement.CheckForDestinationReached(NavMeshAgent)) 
+                Movement = null;
         }
         
-        public void MoveTo(MovementData movementData)
+        public void MoveTo(Movement movement)
         {
-            MovementData = movementData;
+            Movement = movement;
         }
 
         [ContextMenu("Click")]
@@ -61,19 +62,15 @@ namespace Controller
             CharacterMenuController.Show(Character);
         }
 
-        protected override void OnInteractionStart(Character character)
+        public void OnInteractionStart(Character character)
         {
-            base.OnInteractionStart(character);
             NavMeshAgent.isStopped = true;
-            
             Character.Pause();
         }
 
-        protected override void OnInteractionFinish()
+        public void OnInteractionFinish()
         {
-            base.OnInteractionFinish();
             NavMeshAgent.isStopped = false;
-            
             Character.Resume();
         }
     }

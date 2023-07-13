@@ -10,6 +10,7 @@ namespace Domain
         public List<Resolution> Resolutions { get; }
         public ITransform Transform { get; }
         private int Duration { get; }
+        public List<Advertisement> Responses { get; }
         
         public Broadcaster Broadcaster { get; private set; }
 
@@ -17,12 +18,14 @@ namespace Domain
             string name,
             List<Resolution> resolutions,
             ITransform transform,
-            int duration)
+            int duration,
+            List<Advertisement> responses)
         {
             Name = name;
             Resolutions = resolutions;
             Transform = transform;
             Duration = duration;
+            Responses = responses;
         }
 
         public Interaction StartInteraction(Action callback)

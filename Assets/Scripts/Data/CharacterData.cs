@@ -11,7 +11,6 @@ namespace Data
     public class CharacterData
     {
         [field: SerializeField] private List<MotiveData> MotivesData { get; set; }
-        [field: SerializeField] private AdvertisementData PassiveAdvertisement { get; set; }
         
         [field: SerializeField] private int Indecisao { get; set; }
         [field: SerializeField] private float Desespero { get; set; }
@@ -27,7 +26,6 @@ namespace Data
                 name,
                 MotivesData.Select(m => m.ToDomain()).ToList(),
                 broadcaster.Advertisements,       
-                PassiveAdvertisement.ToDomain(transform),
                 broadcasterManager,
                 transform);
         }

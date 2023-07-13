@@ -11,14 +11,12 @@ namespace Domain
         public Dictionary<string, Motive> Motives { get; }
         private BroadcasterManager BroadcasterManager { get; }
         public IMovableTransform Transform { get; }
-        private Advertisement PassiveAdvertisement { get; }
         public Interaction CurrentInteraction { get; private set; }
 
         public Character(
             string name,
             List<Motive> motives,
             List<Advertisement> advertisements,
-            Advertisement passiveAdvertisement,
             BroadcasterManager broadcasterManager,
             IMovableTransform transform) : base(advertisements)
         {
@@ -26,9 +24,6 @@ namespace Domain
             Motives = motives.ToDictionary(m => m.Need, m => m);
             BroadcasterManager = broadcasterManager;
             Transform = transform;
-            
-            PassiveAdvertisement = passiveAdvertisement;
-            PassiveAdvertisement.RegisterBroadcaster(this);
         }
 
         public void Init()
@@ -93,12 +88,13 @@ namespace Domain
             CurrentInteraction = null;
         }
 
-        public override void OnInteractionStart()
+        public override void OnInteractionStart(Advertisement advertisement)
         {
-            base.OnInteractionStart();
+            base.OnInteractionStart(advertisement);
             Pause();
-            
-            MoveToNextInteraction(PassiveAdvertisement);
+
+            var response = BroadcasterManager.FindBestResponse(advertisement.Responses, this);
+            MoveToNextInteraction(response);
         }
         
         private void Pause()

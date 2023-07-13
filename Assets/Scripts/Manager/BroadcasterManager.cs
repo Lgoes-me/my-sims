@@ -49,5 +49,31 @@ namespace Manager
             
             return advertisements[Random.Range(0, upperLimit)];
         }
+        
+        public Advertisement FindBestResponse(List<Advertisement> responses, Character character)
+        {
+            var advertisements = responses
+                .OrderBy(i =>
+                {
+                    var value = 0.0f;
+
+                    foreach (var resolution in  i.Resolutions)
+                    {
+                        if (character.Motives.TryGetValue(resolution.Need, out var motive))
+                        {
+                            value += resolution.Rate * motive.Urgency;
+                            value += Vector3.Distance(i.Transform.Position, character.Transform.Position) * 0.1f;
+                        }
+                    }
+                    
+                    return value;
+                    
+                })
+                .ToList();
+
+            var upperLimit = Mathf.Min(advertisements.Count, 4);
+            
+            return advertisements[Random.Range(0, upperLimit)];
+        }
     }
 }

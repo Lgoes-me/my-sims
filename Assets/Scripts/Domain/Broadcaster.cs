@@ -16,7 +16,7 @@ namespace Domain
             }
         }
         
-        public virtual void OnInteractionStart()
+        public virtual void OnInteractionStart(Advertisement advertisement)
         {
             
         }

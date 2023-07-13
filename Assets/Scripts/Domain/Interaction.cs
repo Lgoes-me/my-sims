@@ -18,7 +18,7 @@ namespace Domain
             CurrentDuration = duration;
             IsInteracting = true;
 
-            Advertisement.Broadcaster?.OnInteractionStart();
+            Advertisement.Broadcaster?.OnInteractionStart(Advertisement);
             
             Callback = () =>
             {

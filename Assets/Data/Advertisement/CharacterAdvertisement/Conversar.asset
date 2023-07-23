@@ -16,3 +16,5 @@ MonoBehaviour:
   - <Need>k__BackingField: {fileID: 11400000, guid: 38e867f18ed6d6c4e9b95e2bc1f047cd, type: 2}
     <Rate>k__BackingField: -5
   <Duration>k__BackingField: 3
+  <Responses>k__BackingField:
+  - {fileID: 11400000, guid: 7176314188ceb094b9457cd454a6f22e, type: 2}

@@ -58,7 +58,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: e285d7a528d4f9e4f8ac8497c446edfd, type: 2}
     - {fileID: 11400000, guid: e691fdfce00c7d44fa20a7e2d1daeeb7, type: 2}
     - {fileID: 11400000, guid: 8e0579871eab03f46a6fbc30e26ceb4a, type: 2}
-    <PassiveAdvertisement>k__BackingField: {fileID: 11400000, guid: 7176314188ceb094b9457cd454a6f22e, type: 2}
+    <Indecisao>k__BackingField: 0
+    <Desespero>k__BackingField: 0
+    <Velocidade>k__BackingField: 0
 --- !u!135 &2153209596732692302
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -118,7 +120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4491931171805663584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
